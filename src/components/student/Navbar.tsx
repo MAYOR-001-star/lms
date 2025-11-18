@@ -1,12 +1,16 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // @ts-expect-error: No declaration file for assets
 import { assets } from "../../assets/assets";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { useGlobalContext } from "../../context/AppContext";
+// import { useGlobalContext } from "../../context/AppContext";
 
-const Navbar: React.FC = () => {
-  const location = useLocation();
+const Navbar = () => {
+  // const {navigate} = useGlobalContext() || {};
+  const navigate = useNavigate();
+  const { isEducator } = useGlobalContext()
   const isCourseListPage = location.pathname.includes("/course-list");
-  const { openSignIn } = useClerk();
+  const { openSignUp } = useClerk();
   const { user } = useUser();
 
   return (
@@ -19,6 +23,7 @@ const Navbar: React.FC = () => {
       <img
         src={assets.logo}
         alt="Logo"
+        onClick={() => navigate("/")}
         className="w-28 lg:w-32 cursor-pointer"
       />
 
@@ -26,7 +31,7 @@ const Navbar: React.FC = () => {
       <div className="hidden md:flex items-center gap-7 text-gray-500">
         {user && (
           <div className="flex items-center gap-2">
-            <button>Become Educator</button>
+            <button>{isEducator ? "Educator Dashboard" : "Become Educator"}</button>
             <span>|</span>
             <Link to="/my-enrollments">My Enrollments</Link>
           </div>
@@ -36,7 +41,7 @@ const Navbar: React.FC = () => {
           <UserButton />
         ) : (
           <button
-            onClick={() => openSignIn()}
+            onClick={() => openSignUp()}
             className="bg-blue-600 text-white px-5 py-2 rounded-full cursor-pointer"
           >
             Create Account
@@ -47,7 +52,9 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
           {user && (
             <div className="flex items-center gap-2">
-              <button>Become Educator</button>
+              <button onClick={()=>navigate('/educator')}>
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </button>
               <span>|</span>
               <Link to="/my-enrollments">My Enrollments</Link>
             </div>
@@ -55,7 +62,7 @@ const Navbar: React.FC = () => {
           {user ? (
             <UserButton />
           ) : (
-            <button onClick={()=>openSignIn()} className="w-7 h-7">
+            <button onClick={() => openSignUp()} className="w-7 h-7">
               <img src={assets.user_icon} alt="" />
             </button>
           )}
