@@ -1,21 +1,32 @@
 import { useNavigate } from "react-router-dom";
 // @ts-expect-error: No declaration file for assets
 import { assets } from "../../assets/assets";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FormEvent, ChangeEvent } from "react";
+import type { SearchBarProps } from "../../types/types";
 
-type SearchBarProps = {
-  data?: string;
-};
+const SearchBar = ({ data = "" }: SearchBarProps) => {
+  const navigate = useNavigate()
 
-const SearchBar = ({ data=""}: SearchBarProps) => {
-  const navigate = useNavigate();
-  // const [input, setInput] = useState("");
+  // Sync input state with URL param
   const [input, setInput] = useState<string>(data);
+
+  useEffect(() => {
+    setInput(data);
+  }, [data]);
 
   const onSearchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(`/course-list/${input.trim()}`);
+
+    const query = input.trim();
+
+    // Navigate to new course search URL
+    if (query.length > 0) {
+      navigate(`/course-list/${query}`);
+    } else {
+      // If empty search, go back to base list
+      navigate(`/course-list`);
+    }
   };
 
   return (
@@ -28,6 +39,7 @@ const SearchBar = ({ data=""}: SearchBarProps) => {
         alt="search icon"
         className="w-5 md:w-auto"
       />
+
       <input
         type="text"
         placeholder="Search for courses"
@@ -38,9 +50,10 @@ const SearchBar = ({ data=""}: SearchBarProps) => {
         value={input}
         className="flex-1 h-full outline-none text-gray-500/80 px-3"
       />
+
       <button
         type="submit"
-        className="bg-blue-600 rounded text-white md:px-10 px-7 md:py-3 py-2 ml-2"
+        className="bg-blue-600 rounded text-white md:px-10 px-7 md:py-3 py-2 ml-2 cursor-pointer"
       >
         Search
       </button>

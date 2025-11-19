@@ -268,6 +268,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Zedicuss",
         "enrolledStudents": [
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
@@ -341,6 +342,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Ethan Cole",
         "enrolledStudents": [
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
@@ -413,6 +415,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Ava Thompson",
         "enrolledStudents": [
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
@@ -479,6 +482,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Oliver Brooks",
         "enrolledStudents": [
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
@@ -545,6 +549,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Daniel Rivera",
         "enrolledStudents": [
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
         ],
@@ -610,6 +615,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Grace Mitchell",
         "enrolledStudents": [
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w",
             "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
@@ -683,6 +689,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "James Carter",
         "enrolledStudents": [
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
         ],
@@ -748,6 +755,7 @@ export const dummyCourses = [
             }
         ],
         "educator": "675ac1512100b91a6d9b8b24",
+        "instructor": "Sophia Martins",
         "enrolledStudents": [
             "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
         ],

@@ -1,12 +1,14 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 // @ts-expect-error: No declaration file for assets
 import { dummyCourses } from "../assets/assets";
-import type { Course, AppContextValue, AppProviderProps } from "../types/types";
+import type {
+  Course,
+  AppContextValue,
+  AppProviderProps,
+  Chapter,
+  Lecture,
+} from "../types/types";
+import humanizeDuration from "humanize-duration";
 
 export const AppContext = createContext<AppContextValue | undefined>(undefined);
 
@@ -18,6 +20,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
   // Educator state
   const [isEducator, setIsEducator] = useState<boolean>(false);
+
+  // const navigate = useNavigate()
 
   // Fetch dummy courses
   const fetchAllCourses = async () => {
@@ -31,6 +35,29 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     return total / course.courseRatings.length;
   };
 
+  const calculateChapterTime = (chapter: Chapter) => {
+    let time = 0;
+    chapter.chapterContent.map(
+      (lecture: Lecture) => (time += lecture.lectureDuration)
+    );
+    return humanizeDuration(time * 60 * 1000, { units: ["h", "m"] });
+  };
+  const calculateCourseDuration = (course: Course) => {
+    let time = 0;
+    course.courseContent.map((chapter) => {
+      chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration));
+    });
+    return humanizeDuration(time*60*1000, {units:["h", "m"]});
+  };
+
+  const calculateNoOfLectures = (course: Course) => {
+    let totalLectures = 0;
+    course.courseContent.forEach((chapter) => {
+      totalLectures += chapter.chapterContent.length;
+    })
+    return totalLectures;
+  }
+
   useEffect(() => {
     fetchAllCourses();
   }, []);
@@ -42,6 +69,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     calculateRating,
     isEducator,
     setIsEducator,
+    calculateChapterTime,
+    calculateCourseDuration,
+    calculateNoOfLectures,
+    
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

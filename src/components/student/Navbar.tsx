@@ -3,15 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { useGlobalContext } from "../../context/AppContext";
-// import { useGlobalContext } from "../../context/AppContext";
 
 const Navbar = () => {
-  // const {navigate} = useGlobalContext() || {};
-  const navigate = useNavigate();
-  const { isEducator } = useGlobalContext()
+  const {isEducator} = useGlobalContext();
   const isCourseListPage = location.pathname.includes("/course-list");
   const { openSignUp } = useClerk();
   const { user } = useUser();
+  const navigate = useNavigate()
 
   return (
     <div
@@ -30,7 +28,7 @@ const Navbar = () => {
       {/* Right section */}
       <div className="hidden md:flex items-center gap-7 text-gray-500">
         {user && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-pointer">
             <button>{isEducator ? "Educator Dashboard" : "Become Educator"}</button>
             <span>|</span>
             <Link to="/my-enrollments">My Enrollments</Link>

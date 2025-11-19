@@ -2,11 +2,8 @@ import { Link } from "react-router-dom";
 // @ts-expect-error: No declaration file for assets
 import { assets } from "../../assets/assets";
 import { useGlobalContext } from "../../context/AppContext";
-import type { Course } from "../../types/types";
+import type { CourseCardProps } from "../../types/types";
 
-type CourseCardProps = {
-  course: Course;
-};
 
 const CourseCard = ({ course }: CourseCardProps) => {
   const { currency, calculateRating } = useGlobalContext() || {};

@@ -4,8 +4,9 @@ import CourseCard from "./CourseCard";
 import type { Course } from "../../types/types";
 
 const CoursesSection = () => {
-  const ctx = useGlobalContext();
-  const allCourses = ctx?.allCourses ?? [];
+  // const ctx = useGlobalContext();
+  // const allCourses = ctx?.allCourses ?? [];
+  const{ allCourses } = useGlobalContext();
   return (
     <div className="py-16 md:px-40 px-8">
       <h2 className="text-3xl font-medium text-gray-800">Learn from best</h2>
