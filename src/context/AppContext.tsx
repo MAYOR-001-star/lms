@@ -21,7 +21,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   // Educator state
   const [isEducator, setIsEducator] = useState<boolean>(false);
 
-  // const navigate = useNavigate()
 
   // Fetch dummy courses
   const fetchAllCourses = async () => {

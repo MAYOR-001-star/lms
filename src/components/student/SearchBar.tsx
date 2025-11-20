@@ -32,7 +32,7 @@ const SearchBar = ({ data = "" }: SearchBarProps) => {
   return (
     <form
       onSubmit={onSearchHandler}
-      className="max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-gray-500/20 rounded px-2 md:px-4"
+      className="max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-gray-500/20 rounded pl-2 pr-1 md:pl-2"
     >
       <img
         src={assets.search_icon}
