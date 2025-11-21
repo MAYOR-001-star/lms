@@ -1,20 +1,21 @@
 // @ts-expect-error: No declaration file for assets
 import { assets } from "../../assets/assets";
 import { useParams } from "react-router-dom";
-import type { paramsType } from "../../types/types";
 import { useMemo, useState } from "react";
 import { useGlobalContext } from "../../context/AppContext";
 import Loading from "../../components/student/Loading";
 import DOMPurify from "dompurify";
+// @ts-expect-error: no type declarations for humanize-duration
 import humanizeDuration from "humanize-duration";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import YouTube from "react-youtube";
 
 const CoursesDetail = () => {
-  const { id } = useParams<paramsType>();
+  const { id } = useParams<string>();
   const [openSection, setOpenSection] = useState<Record<number, boolean>>({});
-  const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
-  const [playerData, setPlayerData] = useState<any>(null);
+  const isEnrolled = false;
+  type PlayerData = { videoId: string } | null;
+  const [playerData, setPlayerData] = useState<PlayerData>(null);
   const {
     allCourses,
     currency,
@@ -149,14 +150,12 @@ const CoursesDetail = () => {
                           />
                           <div className="flex items-center justify-between w-full text-gray-800 text-xs md:text-base">
                             <p>{lecture.lectureTitle}</p>
-                            <div className="flex gap-2">
                               {lecture.isPreviewFree && (
                                 <p
                                   onClick={() =>
                                     setPlayerData({
-                                      videoID: lecture.lectureUrl
-                                        .split("/")
-                                        .pop(),
+                                      videoId:
+                                        lecture.lectureUrl.split("/").pop() ?? "",
                                     })
                                   }
                                   className="text-blue-500 cursor-pointer"
@@ -171,7 +170,6 @@ const CoursesDetail = () => {
                                 )}
                               </p>
                             </div>
-                          </div>
                         </li>
                       ))}
                     </ul>

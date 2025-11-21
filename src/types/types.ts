@@ -10,9 +10,18 @@ export type AppContextValue = {
   calculateRating: (course: Course) => number;
   isEducator: boolean;
   setIsEducator: React.Dispatch<React.SetStateAction<boolean>>;
+  enrolledCourses: Course[];
+  setEnrolledCourses: React.Dispatch<React.SetStateAction<Course[]>>;
   calculateChapterTime: (chapter: Chapter) => string;
   calculateCourseDuration: (course: Course) => string;
   calculateNoOfLectures: (course: Course) => number;
+  fetchUserEnrolledCourses: () => Promise<void>;
+
+  getCourseProgress: (course: Course) => {
+    completed: number;
+    total: number;
+    percentage: number;
+  };
 };
 
 // Course, CourseRating, etc.
@@ -51,28 +60,5 @@ export type Lecture = {
   lectureUrl: string;
   isPreviewFree: boolean;
   lectureOrder: number;
-};
-
-// Testimonial type
-export type dummyTestimonialProps = {
-  name: string;
-  role: string;
-  image: string;
-  rating: number;
-  feedback: string;
-}
-
-//searchbar
-export type SearchBarProps = {
-  data?: string;
-};
-
-//params
-export type paramsType = {
-  id?:string
-  input: string;
-}
-
-export type CourseCardProps = {
-  course: Course;
+  completed: boolean;
 };

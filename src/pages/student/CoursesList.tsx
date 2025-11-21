@@ -4,12 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMemo } from "react";
 import SearchBar from "../../components/student/SearchBar";
 import CourseCard from "../../components/student/CourseCard";
-import type { paramsType, Course } from "../../types/types";
 import { useGlobalContext } from "../../context/AppContext";
+import type { Course } from "../../types/types";
 
 const CoursesList = () => {
   const {  allCourses } = useGlobalContext();
-  const { input } = useParams<paramsType>();
+  const { input } = useParams<string>();
   const navigate = useNavigate();
 
   // Memoized filtered courses
