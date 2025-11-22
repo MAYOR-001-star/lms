@@ -29,7 +29,7 @@ const App = () => {
         {/* --- OTHER ROUTES --- */}
         <Route path="course/:id" element={<CoursesDetail />} />
         <Route path="my-enrollments" element={<MyEnrollement />} />
-        <Route path="player/:id" element={<Player />} />
+        <Route path="player/:courseId" element={<Player />} />
         <Route path="loading/:path" element={<Loading />} />
 
         {/* --- EDUCATOR ROUTES --- */}

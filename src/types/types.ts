@@ -11,7 +11,7 @@ export type AppContextValue = {
   isEducator: boolean;
   setIsEducator: React.Dispatch<React.SetStateAction<boolean>>;
   enrolledCourses: Course[];
-  setEnrolledCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+  // setEnrolledCourses: React.Dispatch<React.SetStateAction<Course[]>>;
   calculateChapterTime: (chapter: Chapter) => string;
   calculateCourseDuration: (course: Course) => string;
   calculateNoOfLectures: (course: Course) => number;
@@ -61,4 +61,22 @@ export type Lecture = {
   isPreviewFree: boolean;
   lectureOrder: number;
   completed: boolean;
+};
+
+export type GetCourseData = {
+  getCourseData: () => Course;
+};
+
+export type PlayerData = {
+  lectureTitle: string;
+  lectureUrl: string;
+  chapter: number;
+  lecture: number;
+  videoId?: string;
+} | null;
+
+
+export type RatingProps = {
+  initialRating?: number;
+  onRate?: (value: number) => void;
 };

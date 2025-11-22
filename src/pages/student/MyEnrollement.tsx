@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../context/AppContext";
 import { Line } from "rc-progress";
 
-const MyEnrollement = () => {
+const MyEnrollment = () => {
   const navigate = useNavigate();
   const { enrolledCourses, calculateCourseDuration, getCourseProgress } =
     useGlobalContext();
@@ -25,11 +25,8 @@ const MyEnrollement = () => {
         <tbody className="text-gray-700">
           {enrolledCourses.map((course) => {
             const progress = getCourseProgress(course);
+            const percentProgress = progress.percentage;
             const isCompleted = progress.completed === progress.total;
-            const percentProgress =
-              progress.total > 0
-                ? (progress.completed / progress.total) * 100
-                : 0;
 
             return (
               <tr
@@ -64,8 +61,7 @@ const MyEnrollement = () => {
                 <td className="px-4 py-4 text-blue-600 font-medium">
                   <button
                     onClick={() => navigate("/player/" + course._id)}
-                    className="hover:underline"
-                    aria-label={`Go to course ${course.courseTitle}`}
+                    className="hover:underline cursor-pointer"
                   >
                     {isCompleted ? "Completed" : "Ongoing"}
                   </button>
@@ -76,22 +72,18 @@ const MyEnrollement = () => {
         </tbody>
       </table>
 
-      {/* MOBILE CARD VIEW */}
+      {/* MOBILE VIEW */}
       <div className="sm:hidden mt-10 space-y-6">
         {enrolledCourses.map((course) => {
           const progress = getCourseProgress(course);
+          const percentProgress = progress.percentage;
           const isCompleted = progress.completed === progress.total;
-          const percentProgress =
-            progress.total > 0
-              ? (progress.completed / progress.total) * 100
-              : 0;
 
           return (
             <div
               key={course._id}
               className="border border-gray-200 rounded-lg p-4 shadow-md bg-white"
             >
-              {/* Top: Image + Title */}
               <div className="flex gap-4 items-center">
                 <img
                   src={course.courseThumbnail}
@@ -113,7 +105,6 @@ const MyEnrollement = () => {
                 </div>
               </div>
 
-              {/* Bottom Details */}
               <div className="mt-4 flex justify-between text-sm">
                 <p>
                   <span className="font-semibold">
@@ -125,7 +116,6 @@ const MyEnrollement = () => {
                 <button
                   className="text-blue-600 font-semibold hover:underline cursor-pointer"
                   onClick={() => navigate("/player/" + course._id)}
-                  aria-label={`Go to course ${course.courseTitle}`}
                 >
                   {isCompleted ? "Completed" : "Ongoing"}
                 </button>
@@ -138,4 +128,4 @@ const MyEnrollement = () => {
   );
 };
 
-export default MyEnrollement;
+export default MyEnrollment;

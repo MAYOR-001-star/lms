@@ -9,13 +9,15 @@ import DOMPurify from "dompurify";
 import humanizeDuration from "humanize-duration";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import YouTube from "react-youtube";
+import type { PlayerData } from "../../types/types";
 
 const CoursesDetail = () => {
   const { id } = useParams<string>();
   const [openSection, setOpenSection] = useState<Record<number, boolean>>({});
   const isEnrolled = false;
-  type PlayerData = { videoId: string } | null;
+
   const [playerData, setPlayerData] = useState<PlayerData>(null);
+
   const {
     allCourses,
     currency,
@@ -34,6 +36,7 @@ const CoursesDetail = () => {
   const sanitizedDescription = DOMPurify.sanitize(
     courseData.courseDescription || ""
   );
+
   const ratingValue = calculateRating?.(courseData) || 0;
 
   const toggleSection = (index: number) => {
@@ -46,7 +49,8 @@ const CoursesDetail = () => {
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-sky-50 to-white pt-10 pb-20">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 px-6 md:px-12">
-        {/* LEFT SIDE — COURSE DETAILS */}
+
+        {/* LEFT SIDE */}
         <div className="w-full md:w-3/5 space-y-6">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-snug">
             {courseData.courseTitle}
@@ -59,7 +63,7 @@ const CoursesDetail = () => {
             }}
           />
 
-          {/* Ratings Row */}
+          {/* Ratings */}
           <div className="flex items-center gap-3 mt-4">
             <p className="font-semibold">{ratingValue.toFixed(1)}</p>
             <div className="flex">
@@ -82,7 +86,6 @@ const CoursesDetail = () => {
             </p>
           </div>
 
-          {/* Instructor */}
           <p className="text-sm mt-2 text-gray-700">
             Course by{" "}
             <span className="text-blue-600 underline">
@@ -90,7 +93,6 @@ const CoursesDetail = () => {
             </span>
           </p>
 
-          {/* Course Description */}
           <h2 className="mt-10 mb-2 font-semibold text-xl">
             Course Description
           </h2>
@@ -99,16 +101,15 @@ const CoursesDetail = () => {
             dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
           />
 
-          {/* Course Structure */}
+          {/* COURSE STRUCTURE */}
           <div className="pt-10">
             <h2 className="text-xl font-semibold mb-4">Course Structure</h2>
             <div className="space-y-2">
               {courseData.courseContent.map((chapter, index) => (
                 <div
                   key={index}
-                  className={`border border-gray-300 bg-white rounded shadow-sm hover:shadow-md transition-shadow duration-300`}
+                  className="border border-gray-300 bg-white rounded shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
-                  {/* Accordion Header */}
                   <div
                     className="flex items-center justify-between px-4 py-3 cursor-pointer select-none"
                     onClick={() => toggleSection(index)}
@@ -125,37 +126,45 @@ const CoursesDetail = () => {
                         {chapter.chapterTitle}
                       </p>
                     </div>
+
                     <p className="text-sm md:text-base">
-                      {chapter.chapterContent.length} Lectures -{" "}
+                      {chapter.chapterContent.length} Lectures –{" "}
                       {calculateChapterTime(chapter)}
                     </p>
                   </div>
 
-                  {/* Accordion Content */}
+                  {/* CONTENT */}
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
                       openSection[index] ? "max-h-[2000px] py-2" : "max-h-0"
                     }`}
                   >
                     <ul className="list-disc md:pl-10 pl-4 pr-4 text-gray-600">
+
                       {chapter.chapterContent.map((lecture, lecIndex) => (
-                        <li
-                          key={lecIndex}
-                          className="flex items-start gap-2 py-1"
-                        >
+                        <li key={lecIndex} className="flex items-start gap-2 py-1">
                           <img
                             src={assets.play_icon}
                             alt="play icon"
                             className="w-4 h-4 mt-1"
                           />
+
                           <div className="flex items-center justify-between w-full text-gray-800 text-xs md:text-base">
                             <p>{lecture.lectureTitle}</p>
+
+                            <div className="flex items-center gap-3">
+                              {/* YOUR ORIGINAL UNSAFE YOUTUBE LOGIC */}
                               {lecture.isPreviewFree && (
                                 <p
                                   onClick={() =>
                                     setPlayerData({
+                                      lectureTitle: lecture.lectureTitle,
+                                      lectureUrl: lecture.lectureUrl,
+                                      chapter: index,
+                                      lecture: lecIndex,
                                       videoId:
-                                        lecture.lectureUrl.split("/").pop() ?? "",
+                                        lecture.lectureUrl.split("/").pop() ??
+                                        "",
                                     })
                                   }
                                   className="text-blue-500 cursor-pointer"
@@ -163,6 +172,7 @@ const CoursesDetail = () => {
                                   Preview
                                 </p>
                               )}
+
                               <p>
                                 {humanizeDuration(
                                   lecture.lectureDuration * 60 * 1000,
@@ -170,27 +180,27 @@ const CoursesDetail = () => {
                                 )}
                               </p>
                             </div>
+                          </div>
                         </li>
                       ))}
+
                     </ul>
                   </div>
+
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* RIGHT SIDE — COURSE PURCHASE CARD */}
+        {/* RIGHT SIDE */}
         <div className="w-full md:w-2/5">
           <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 space-y-4">
+
             {playerData ? (
               <YouTube
-                videoId={playerData.videoId}
-                opts={{
-                  playerVars: {
-                    autoplay: 1,
-                  },
-                }}
+                videoId={playerData.videoId ?? ""}
+                opts={{ playerVars: { autoplay: 1 } }}
                 iframeClassName="w-full aspect-video"
               />
             ) : (
@@ -203,7 +213,6 @@ const CoursesDetail = () => {
 
             <div className="flex items-center gap-2">
               <img className="w-3.5" src={assets.time_left_clock_icon} alt="" />
-
               <p className="text-red-500">
                 <span>5 days</span> left at this price
               </p>
@@ -218,10 +227,12 @@ const CoursesDetail = () => {
                     (courseData.discount * courseData.coursePrice) / 100
                   ).toFixed(2)}
                 </p>
+
                 <p className="text-sm text-gray-600 line-through">
                   {currency}
                   {courseData.coursePrice}
                 </p>
+
                 <p className="text-sm text-gray-400">
                   {courseData.discount}% off
                 </p>
@@ -232,12 +243,16 @@ const CoursesDetail = () => {
                   <img src={assets.star} alt="star-icon" />
                   <p>{calculateRating(courseData)}</p>
                 </div>
+
                 <div className="h-4 w-px bg-gray-500/40"></div>
+
                 <div className="flex items-center gap-1">
                   <img src={assets.time_clock_icon} alt="clock-icon" />
                   <p>{calculateCourseDuration(courseData)}</p>
                 </div>
+
                 <div className="h-4 w-px bg-gray-500/40"></div>
+
                 <div className="flex items-center gap-1">
                   <img src={assets.lesson_icon} alt="lesson-icon" />
                   <p>{calculateNoOfLectures(courseData)}</p>
@@ -259,6 +274,7 @@ const CoursesDetail = () => {
                 <h3 className="font-semibold text-lg mb-2">
                   What's in the course?
                 </h3>
+
                 <ul className="text-sm space-y-3 text-gray-700">
                   {[
                     "Lifetime access with free updates.",
@@ -268,18 +284,17 @@ const CoursesDetail = () => {
                     "Quizzes to test knowledge.",
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-center gap-2">
-                      <RiCheckboxBlankCircleFill
-                        size={6}
-                        className="text-gray-500"
-                      />
+                      <RiCheckboxBlankCircleFill size={6} className="text-gray-500" />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
+
       </div>
     </div>
   );

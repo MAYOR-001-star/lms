@@ -18,23 +18,43 @@ export const AppContext = createContext<AppContextValue | undefined>(undefined);
 export const AppProvider = ({ children }: AppProviderProps) => {
   const currency = import.meta.env.VITE_CURRENCY as string;
 
-  // All courses
   const [allCourses, setAllCourses] = useState<Course[]>([]);
-
-  // Educator state
   const [isEducator, setIsEducator] = useState<boolean>(false);
-
-  // Enrolled courses (full course objects)
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
 
-  // Load dummy courses
+  // ★★★★★ Progress array for each course
+  const [progressArray, setProgressArray] = useState<
+    { completed: number; total: number; percentage: number }[]
+  >([]);
+
+  // ★★★★★ Generate mock progress
+  const generateMockProgress = (courses: Course[]) => {
+    return courses.map((course, index) => {
+      // First 3 courses ALWAYS fully completed
+      if (index < 3) {
+        return {
+          completed: 4,
+          total: 4,
+          percentage: 100,
+        };
+      }
+
+      // Others = partial random progress
+      const total = Math.floor(Math.random() * 4) + 3; // 3–6 lectures
+      const completed = Math.floor(Math.random() * total);
+      const percentage = Math.round((completed / total) * 100);
+
+      return { completed, total, percentage };
+    });
+  };
+
   const fetchAllCourses = async () => {
     setAllCourses(dummyCourses);
   };
 
-  // Load enrolled courses (dummy for now)
   const fetchUserEnrolledCourses = async () => {
     setEnrolledCourses(dummyCourses);
+    setProgressArray(generateMockProgress(dummyCourses));
   };
 
   useEffect(() => {
@@ -42,14 +62,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     fetchUserEnrolledCourses();
   }, []);
 
-  // ★★★★★ Calculate Rating
+  // ★★★★★ Rating
   const calculateRating = (course: Course): number => {
     if (course.courseRatings.length === 0) return 0;
     const total = course.courseRatings.reduce((sum, r) => sum + r.rating, 0);
     return total / course.courseRatings.length;
   };
 
-  // ★★★★★ Calculate Chapter Time
+  // ★★★★★ Chapter time
   const calculateChapterTime = (chapter: Chapter): string => {
     let time = 0;
 
@@ -62,7 +82,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     });
   };
 
-  // ★★★★★ Calculate Whole Course Duration
+  // ★★★★★ Whole course duration
   const calculateCourseDuration = (course: Course): string => {
     let time = 0;
 
@@ -77,7 +97,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     });
   };
 
-  // ★★★★★ Count total lectures
+  // ★★★★★ Lecture count
   const calculateNoOfLectures = (course: Course): number => {
     let total = 0;
 
@@ -88,21 +108,15 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     return total;
   };
 
-  // ★★★★★ Calculate course progress
+  // ★★★★★ Return progress from the progressArray
   const getCourseProgress = (course: Course) => {
-    let completed = 0;
-    let total = 0;
+    const index = enrolledCourses.findIndex((c) => c._id === course._id);
 
-    course.courseContent.forEach((chapter: Chapter) => {
-      chapter.chapterContent.forEach((lecture: Lecture) => {
-        total++;
-        if (lecture.completed) completed++;
-      });
-    });
+    if (index !== -1 && progressArray[index]) {
+      return progressArray[index];
+    }
 
-    const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-    return { completed, total, percentage };
+    return { completed: 0, total: 0, percentage: 0 };
   };
 
   const value: AppContextValue = {
@@ -112,7 +126,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     isEducator,
     setIsEducator,
     enrolledCourses,
-    setEnrolledCourses,
+    // setEnrolledCourses,
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,
