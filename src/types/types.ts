@@ -86,9 +86,9 @@ export type SearchBarProps = {
 };
 
 export type DummyTestimonialProps = {
-    name: string,
-    role: string,
-    image: string,
-    rating: number,
-    feedback: string,
-  }
+  name: string;
+  role: string;
+  image: string;
+  rating: number;
+  feedback: string;
+};
