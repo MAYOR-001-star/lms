@@ -21,11 +21,19 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [isEducator, setIsEducator] = useState<boolean>(false);
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
-
-  // ★★★★★ Progress array for each course
   const [progressArray, setProgressArray] = useState<
     { completed: number; total: number; percentage: number }[]
   >([]);
+
+  const generateMockProgress = (courses: Course[]) => {
+    return courses.map((_, index) => {
+      if (index < 3) return { completed: 4, total: 4, percentage: 100 };
+      const total = Math.floor(Math.random() * 4) + 3; // 3–6 lectures
+      const completed = Math.floor(Math.random() * total);
+      const percentage = Math.round((completed / total) * 100);
+      return { completed, total, percentage };
+    });
+  };
 
   const fetchAllCourses = async () => {
     setAllCourses(dummyCourses);
@@ -41,60 +49,40 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     fetchUserEnrolledCourses();
   }, []);
 
-  // ★★★★★ Rating
   const calculateRating = (course: Course): number => {
     if (course.courseRatings.length === 0) return 0;
     const total = course.courseRatings.reduce((sum, r) => sum + r.rating, 0);
     return total / course.courseRatings.length;
   };
 
-  // ★★★★★ Chapter time
   const calculateChapterTime = (chapter: Chapter): string => {
     let time = 0;
-
     chapter.chapterContent.forEach((lecture: Lecture) => {
       time += lecture.lectureDuration;
     });
-
-    return humanizeDuration(time * 60 * 1000, {
-      units: ["h", "m"],
-    });
+    return humanizeDuration(time * 60 * 1000, { units: ["h", "m"] });
   };
 
-  // ★★★★★ Whole course duration
   const calculateCourseDuration = (course: Course): string => {
     let time = 0;
-
     course.courseContent.forEach((chapter: Chapter) => {
       chapter.chapterContent.forEach((lecture: Lecture) => {
         time += lecture.lectureDuration;
       });
     });
-
-    return humanizeDuration(time * 60 * 1000, {
-      units: ["h", "m"],
-    });
+    return humanizeDuration(time * 60 * 1000, { units: ["h", "m"] });
   };
 
-  // ★★★★★ Lecture count
   const calculateNoOfLectures = (course: Course): number => {
-    let total = 0;
-
-    course.courseContent.forEach((chapter: Chapter) => {
-      total += chapter.chapterContent.length;
-    });
-
-    return total;
+    return course.courseContent.reduce(
+      (sum, chapter) => sum + chapter.chapterContent.length,
+      0
+    );
   };
 
-  // ★★★★★ Return progress from the progressArray
   const getCourseProgress = (course: Course) => {
     const index = enrolledCourses.findIndex((c) => c._id === course._id);
-
-    if (index !== -1 && progressArray[index]) {
-      return progressArray[index];
-    }
-
+    if (index !== -1 && progressArray[index]) return progressArray[index];
     return { completed: 0, total: 0, percentage: 0 };
   };
 
@@ -105,7 +93,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     isEducator,
     setIsEducator,
     enrolledCourses,
-    // setEnrolledCourses,
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,
@@ -118,8 +105,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
 export const useGlobalContext = () => {
   const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useGlobalContext must be used inside AppProvider");
-  }
+  if (!context) throw new Error("useGlobalContext must be used inside AppProvider");
   return context;
 };
