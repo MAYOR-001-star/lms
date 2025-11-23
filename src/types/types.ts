@@ -81,7 +81,14 @@ export type RatingProps = {
   onRate?: (value: number) => void;
 };
 
-//searchbar
 export type SearchBarProps = {
   data?: string;
 };
+
+export const dummyTestimonialProps = {
+    name: string,
+    role: string,
+    image: string,
+    rating: number,
+    feedback: string,
+  }
