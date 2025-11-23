@@ -80,3 +80,8 @@ export type RatingProps = {
   initialRating?: number;
   onRate?: (value: number) => void;
 };
+
+//searchbar
+export type SearchBarProps = {
+  data?: string;
+};
