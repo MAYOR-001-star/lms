@@ -1,6 +1,6 @@
 // @ts-expect-error: No declaration file for assets
 import { dummyTestimonial, assets } from "../../assets/assets";
-import type { dummyTestimonialProps } from "../../types/types";
+import type { DummyTestimonialProps } from "../../types/types";
 
 const TestimonialSection = () => {
   return (
@@ -16,7 +16,7 @@ const TestimonialSection = () => {
       {/* GRID LAYOUT — uncommented and fixed */}
       <div className="mt-10 grid gap-8 md:grid-cols-3 px-4 md:px-24 lg:px-36">
         {dummyTestimonial.map(
-          (testimonial: dummyTestimonialProps, index: number) => (
+          (testimonial: DummyTestimonialProps, index: number) => (
             <div
               key={index}
               className="text-sm text-left border border-gray-500/30 rounded-lg shadow-[0px_4px_15px_0px] bg-white shadow-black/5 overflow-hidden p-6"
