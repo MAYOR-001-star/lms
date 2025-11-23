@@ -85,7 +85,7 @@ export type SearchBarProps = {
   data?: string;
 };
 
-export const DummyTestimonialProps = {
+export type DummyTestimonialProps = {
     name: string,
     role: string,
     image: string,
