@@ -27,27 +27,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     { completed: number; total: number; percentage: number }[]
   >([]);
 
-  // ★★★★★ Generate mock progress
-  const generateMockProgress = (courses: Course[]) => {
-    return courses.map((course, index) => {
-      // First 3 courses ALWAYS fully completed
-      if (index < 3) {
-        return {
-          completed: 4,
-          total: 4,
-          percentage: 100,
-        };
-      }
-
-      // Others = partial random progress
-      const total = Math.floor(Math.random() * 4) + 3; // 3–6 lectures
-      const completed = Math.floor(Math.random() * total);
-      const percentage = Math.round((completed / total) * 100);
-
-      return { completed, total, percentage };
-    });
-  };
-
   const fetchAllCourses = async () => {
     setAllCourses(dummyCourses);
   };
